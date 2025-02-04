@@ -1,3 +1,4 @@
+using TriInspector;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -24,14 +25,34 @@ public class ApartmentPanelController : MonoBehaviour
     public Transform worldPosition;
     public Vector2 offset;
 
-    void Update()
+    [Button]
+    private void GetScreenPoint()
     {
         Vector3 screenPos = mainCamera.WorldToScreenPoint(worldPosition.position);
-        // Flip Y for UI Toolkit.
-        screenPos.y = Screen.height - screenPos.y;
-
-        Vector2 finalPosition = (Vector2)screenPos + offset;
-        ApartmentPanel.style.left = finalPosition.x;
-        ApartmentPanel.style.top = finalPosition.y;
+        Debug.Log($"#arvz# screenPos {screenPos}");
     }
+    
+    private void Update()
+    {
+        var panel = uiDocument.rootVisualElement.panel;
+
+        Vector2 screenPos = mainCamera.WorldToScreenPoint(worldPosition.position);
+        screenPos.y = Screen.height - screenPos.y; // Invert Y
+        screenPos += offset;
+
+        Vector2 panelPos = RuntimePanelUtils.ScreenToPanel(panel, screenPos);
+        ApartmentPanel.style.left = panelPos.x;
+        ApartmentPanel.style.top  = panelPos.y;
+        
+        ConsoleProDebug.Watch("left", panelPos.x.ToString());
+        ConsoleProDebug.Watch("top", panelPos.y.ToString());
+    }
+
+    public void SetPanelText(string text)
+    {
+        var root = uiDocument.rootVisualElement;
+        var apartmentNumberText = root.Q<TextElement>("ApartmentNumber");
+        apartmentNumberText.text = text;
+    }
+    
 }
