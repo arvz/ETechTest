@@ -1,0 +1,8 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/_UI/ApartmentView.uss?fileID=7433441132597879392&amp;guid=877380194656cd447b0d6aa52cd0d36b&amp;type=3#ApartmentView" />
+    <engine:VisualElement style="flex-grow: 1;">
+        <engine:VisualElement name="ApartmentPanel" style="flex-grow: 0; width: 31%; height: 35%; flex-shrink: 0; position: relative; top: 50%; left: 50%; background-color: rgb(255, 255, 255); right: 50%; bottom: 50%;">
+            <engine:Label text="Label" />
+        </engine:VisualElement>
+    </engine:VisualElement>
+</engine:UXML>
