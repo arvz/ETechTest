@@ -1,5 +1,7 @@
 using System;
 using BuildingViewer.Input;
+using EnvizTest.Core.Messaging;
+using Unity.Cinemachine;
 using UnityEngine;
 
 namespace TV.Camera
@@ -10,7 +12,8 @@ namespace TV.Camera
     /// </summary>
     public class CameraOrbit : MonoBehaviour
     {
-        public GameObject target;
+        private GameObject target => _cmCamera.LookAt.gameObject;
+        
         public float minDistance = 0.5f;
         public float maxDistance = 10f;
         public float distance = 4.0f;
@@ -29,11 +32,13 @@ namespace TV.Camera
         private BuildingViewerActions _actions;
 
         private string _filePath;
+        private CinemachineCamera _cmCamera;
 
         private void Awake()
         {
             _actions = new();
             _actions.Enable();
+            _cmCamera = GetComponent<CinemachineCamera>();
         }
 
         private void Start()
