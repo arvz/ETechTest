@@ -35,6 +35,7 @@ public class ApartmentManager : MonoBehaviour
             _currentActiveApartment.gameObject.SetActive(false);
         }
 
+        _currentActiveApartment = apartmentPanelController;
         apartmentPanelController.gameObject.SetActive(true);
     }
 
@@ -47,7 +48,7 @@ public class ApartmentManager : MonoBehaviour
             worldTransformObject.transform.name = $"{apartmentData.apartmentNumber} World Object";
 
             var apartmentPanel = Instantiate(_apartmentPanelPrefab, _panelsCanvas.transform);
-            apartmentPanel.Initialize(worldTransformObject.transform);
+            apartmentPanel.Initialize(worldTransformObject.transform, apartmentData);
             _apartmentPanels.Add(apartmentData, apartmentPanel);
 
             var apartmentListEntry = Instantiate(_apartmentListEntryPrefab, _sidebarEntryParent);
