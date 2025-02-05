@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ApartmentListEntry : Selectable, IPointerEnterHandler, IPointerExitHandler
+public class ApartmentListEntry : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
     [Header("Settings")]
     [SerializeField] private Color _normalColor;
@@ -20,7 +20,16 @@ public class ApartmentListEntry : Selectable, IPointerEnterHandler, IPointerExit
     [SerializeField] private TextMeshProUGUI _parkingText;
     
     private ApartmentData _apartmentData;
+    private bool _selected;
 
+    private void Update()
+    {
+        if (ShouldDeselect())
+        {
+            Deselect();
+        }
+    }
+    
     public void Initialize(ApartmentData apartmentData)
     {
         _apartmentData = apartmentData;
@@ -40,16 +49,34 @@ public class ApartmentListEntry : Selectable, IPointerEnterHandler, IPointerExit
         Tween.Color(_backgroundPanelImage, _normalColor, 0.2f);
     }
 
-    public override void OnSelect(BaseEventData eventData)
+    public void OnPointerDown(PointerEventData eventData)
     {
-        base.OnSelect(eventData);
+        _selected = true;
         _selectionBorderImage.gameObject.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(gameObject);
         Messaging.SendMessage(MessageType.ApartmentEntryClicked, _apartmentData);
     }
     
-    public override void OnDeselect(BaseEventData eventData)
+    private void Deselect()
     {
-        base.OnDeselect(eventData);
+        _selected = false;
         _selectionBorderImage.gameObject.SetActive(false);
+    }
+    
+    private bool ShouldDeselect()
+    {
+        if (_selected == false)
+        {
+            return false;
+        }
+
+        GameObject currentlySelected = EventSystem.current.currentSelectedGameObject;
+
+        if (currentlySelected == gameObject || currentlySelected == null)
+        {
+            return false;
+        }
+
+        return true;
     }
 }
