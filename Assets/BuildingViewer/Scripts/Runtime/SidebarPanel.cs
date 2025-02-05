@@ -1,5 +1,3 @@
-using System;
-using Cysharp.Threading.Tasks;
 using PrimeTween;
 using TriInspector;
 using UnityEngine;

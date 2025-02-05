@@ -2,7 +2,6 @@ using System;
 using BuildingViewer.Input;
 using Unity.Cinemachine;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace TV.Camera
 {

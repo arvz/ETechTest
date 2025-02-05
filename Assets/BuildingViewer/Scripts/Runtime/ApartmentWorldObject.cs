@@ -1,6 +1,4 @@
-using System;
 using EnvizTest.Core.Messaging;
-using TV.Camera;
 using Unity.Cinemachine;
 using UnityEngine;
 
