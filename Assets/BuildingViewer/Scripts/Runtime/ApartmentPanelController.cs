@@ -1,7 +1,4 @@
-using System;
-using TriInspector;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 [ExecuteInEditMode]
 public class ApartmentPanelController : MonoBehaviour

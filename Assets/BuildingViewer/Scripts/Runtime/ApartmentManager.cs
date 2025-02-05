@@ -12,10 +12,30 @@ public class ApartmentManager : MonoBehaviour
     [SerializeField] private GameObject _worldTransformPrefab;
     [SerializeField] private ApartmentListEntry _apartmentListEntryPrefab;
     [SerializeField] private ApartmentPanelController _apartmentPanelPrefab;
-    
+
+    private Dictionary<ApartmentData, ApartmentPanelController> _apartmentPanels = new();
+    private ApartmentPanelController _currentActiveApartment;
+
     private void Awake()
     {
         Messaging.AddListener<List<ApartmentData>>(MessageType.ApartmentDataLoaded, OnApartmentDataLoaded);
+        Messaging.AddListener<ApartmentData>(MessageType.ApartmentEntryClicked, OnApartmentEntryClicked);
+    }
+
+    private void OnApartmentEntryClicked(ApartmentData data)
+    {
+        bool found = _apartmentPanels.TryGetValue(data, out var apartmentPanelController);
+        if (found == false)
+        {
+            return;
+        }
+
+        if (_currentActiveApartment != null)
+        {
+            _currentActiveApartment.gameObject.SetActive(false);
+        }
+
+        apartmentPanelController.gameObject.SetActive(true);
     }
 
     private void OnApartmentDataLoaded(List<ApartmentData> allApartmentData)
@@ -25,13 +45,13 @@ public class ApartmentManager : MonoBehaviour
             var worldTransformObject = Instantiate(_worldTransformPrefab, apartmentData.position, Quaternion.identity);
             worldTransformObject.transform.SetParent(transform);
             worldTransformObject.transform.name = $"{apartmentData.apartmentNumber} World Object";
-            
+
             var apartmentPanel = Instantiate(_apartmentPanelPrefab, _panelsCanvas.transform);
             apartmentPanel.Initialize(worldTransformObject.transform);
-            
+            _apartmentPanels.Add(apartmentData, apartmentPanel);
+
             var apartmentListEntry = Instantiate(_apartmentListEntryPrefab, _sidebarEntryParent);
             apartmentListEntry.Initialize(apartmentData);
         }
-        
     }
 }

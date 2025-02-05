@@ -1,3 +1,4 @@
+using EnvizTest.Core.Messaging;
 using PrimeTween;
 using TMPro;
 using UnityEngine;
@@ -43,6 +44,7 @@ public class ApartmentListEntry : Selectable, IPointerEnterHandler, IPointerExit
     {
         base.OnSelect(eventData);
         _selectionBorderImage.gameObject.SetActive(true);
+        Messaging.SendMessage(MessageType.ApartmentEntryClicked, _apartmentData);
     }
     
     public override void OnDeselect(BaseEventData eventData)
