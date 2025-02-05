@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using EnvizTest.Core.Messaging;
 using UnityEngine;
@@ -21,6 +22,12 @@ public class ApartmentManager : MonoBehaviour
     {
         Messaging.AddListener<List<ApartmentData>>(MessageType.ApartmentDataLoaded, OnApartmentDataLoaded);
         Messaging.AddListener<ApartmentData>(MessageType.ApartmentEntryClicked, OnApartmentEntryClicked);
+    }
+
+    private void OnDestroy()
+    {
+        Messaging.RemoveListener<List<ApartmentData>>(MessageType.ApartmentDataLoaded, OnApartmentDataLoaded);
+        Messaging.RemoveListener<ApartmentData>(MessageType.ApartmentEntryClicked, OnApartmentEntryClicked);
     }
 
     private void OnApartmentEntryClicked(ApartmentData data)

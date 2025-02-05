@@ -1,8 +1,8 @@
 using System;
 using BuildingViewer.Input;
-using EnvizTest.Core.Messaging;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace TV.Camera
 {
@@ -14,24 +14,23 @@ namespace TV.Camera
     {
         private GameObject target => _cmCamera.LookAt.gameObject;
         
-        public float minDistance = 0.5f;
-        public float maxDistance = 10f;
-        public float distance = 4.0f;
+        [SerializeField] private float _minDistance = 0.5f;
+        [SerializeField] private float _maxDistance = 10f;
+        [SerializeField] private float _distance = 4.0f;
 
-        public float xSpeed = 250.0f;
-        public float ySpeed = 120.0f;
+        [SerializeField] private float _xSpeed = 250.0f;
+        [SerializeField] private float _ySpeed = 120.0f;
 
-        public float yMinLimit = -20;
-        public float yMaxLimit = 80;
+        [SerializeField] private float _yMinLimit = -20;
+        [SerializeField] private float _yMaxLimit = 80;
 
-        private float _x = 0.0f;
-        private float _y = 0.0f;
+        private float _x;
+        private float _y;
 
         private float _prevDistance;
         private bool _didMouseStartOnScreen;
         private BuildingViewerActions _actions;
 
-        private string _filePath;
         private CinemachineCamera _cmCamera;
 
         private void Awake()
@@ -55,8 +54,8 @@ namespace TV.Camera
             float scrollY = _actions.Player.Zoom.ReadValue<Vector2>().y;
             if (Math.Abs(scrollY) > 0)
             {
-                distance *= 1 - scrollY * 0.1f;
-                distance = Mathf.Clamp(distance, minDistance, maxDistance);
+                _distance *= 1 - scrollY * 0.1f;
+                _distance = Mathf.Clamp(_distance, _minDistance, _maxDistance);
             }
 
             if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
@@ -66,44 +65,33 @@ namespace TV.Camera
                 return;
             }
 
-            if (CanMoveCamera() && _didMouseStartOnScreen && (Input.GetMouseButton(0) || Input.GetMouseButton(1)))
+            if (_didMouseStartOnScreen && (Input.GetMouseButton(0) || Input.GetMouseButton(1)))
             {
-                // comment out these two lines if you don't want to hide mouse curser or you have a UI button
-                // Cursor.visible = false;
-                // Cursor.lockState = CursorLockMode.Locked;
-                _x += Input.GetAxis("Mouse X") * xSpeed * 0.02f;
-                _y -= Input.GetAxis("Mouse Y") * ySpeed * 0.02f;
+                _x += Input.GetAxis("Mouse X") * _xSpeed * 0.02f;
+                _y -= Input.GetAxis("Mouse Y") * _ySpeed * 0.02f;
 
-                _y = ClampAngle(_y, yMinLimit, yMaxLimit);
+                _y = ClampAngle(_y, _yMinLimit, _yMaxLimit);
                 var rotation = Quaternion.Euler(_y, _x, 0);
-                var position = rotation * new Vector3(0.0f, 0.0f, -distance) + target.transform.position;
+                var position = rotation * new Vector3(0.0f, 0.0f, -_distance) + target.transform.position;
                 transform.rotation = rotation;
                 transform.position = position;
             }
             else
             {
-                // comment out these two lines if you don't want to hide mouse cursor or you have a UI button
-                // Cursor.visible = true;
-                // Cursor.lockState = CursorLockMode.None;
                 _didMouseStartOnScreen = false;
             }
 
-            if (Mathf.Abs(_prevDistance - distance) > 0.001f)
+            if (Mathf.Abs(_prevDistance - _distance) > 0.001f)
             {
-                _prevDistance = distance;
+                _prevDistance = _distance;
                 var rot = Quaternion.Euler(_y, _x, 0);
-                var po = rot * new Vector3(0.0f, 0.0f, -distance) + target.transform.position;
+                var po = rot * new Vector3(0.0f, 0.0f, -_distance) + target.transform.position;
                 transform.rotation = rot;
                 transform.position = po;
             }
         }
 
-        private bool CanMoveCamera()
-        {
-            return true;
-        }
-
-        static float ClampAngle(float angle, float min, float max)
+        private static float ClampAngle(float angle, float min, float max)
         {
             if (angle < -360)
                 angle += 360;
