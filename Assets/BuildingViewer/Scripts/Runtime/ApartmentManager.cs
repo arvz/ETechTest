@@ -5,10 +5,12 @@ using UnityEngine;
 public class ApartmentManager : MonoBehaviour
 {
     [Header("Scene References")]
-    [SerializeField] private Canvas _canvas;
+    [SerializeField] private Canvas _panelsCanvas;
+    [SerializeField] private RectTransform _sidebarEntryParent;
 
     [Header("Asset References")]
     [SerializeField] private GameObject _worldTransformPrefab;
+    [SerializeField] private ApartmentListEntry _apartmentListEntryPrefab;
     [SerializeField] private ApartmentPanelController _apartmentPanelPrefab;
     
     private void Awake()
@@ -24,8 +26,11 @@ public class ApartmentManager : MonoBehaviour
             worldTransformObject.transform.SetParent(transform);
             worldTransformObject.transform.name = $"{apartmentData.apartmentNumber} World Object";
             
-            var apartmentPanel = Instantiate(_apartmentPanelPrefab, _canvas.transform);
+            var apartmentPanel = Instantiate(_apartmentPanelPrefab, _panelsCanvas.transform);
             apartmentPanel.Initialize(worldTransformObject.transform);
+            
+            var apartmentListEntry = Instantiate(_apartmentListEntryPrefab, _sidebarEntryParent);
+            apartmentListEntry.Initialize(apartmentData);
         }
         
     }

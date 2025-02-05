@@ -36,6 +36,7 @@ public class ApartmentPanelController : MonoBehaviour
 
     public void Initialize(Transform worldTransformObject)
     {
+        gameObject.SetActive(false);
         _worldTransform = worldTransformObject;
     }
 }
