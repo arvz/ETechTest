@@ -1627,13 +1627,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd692216b338dfe4f9c9b89c4f8854df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minDistance: 20
-  maxDistance: 100
-  distance: 100
-  xSpeed: 250
-  ySpeed: 120
-  yMinLimit: -20
-  yMaxLimit: 80
+  _minDistance: 20
+  _maxDistance: 100
+  _distance: 100
+  _xSpeed: 250
+  _ySpeed: 120
+  _yMinLimit: -20
+  _yMaxLimit: 80
 --- !u!114 &1084562426
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1647,7 +1647,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Priority:
-    Enabled: 0
+    Enabled: 1
     m_Value: 0
   OutputChannel: 1
   StandbyUpdate: 2
